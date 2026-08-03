@@ -14,3 +14,10 @@ For this enhancement, I migrated the Travlr Getaways administrative single-page 
 
 - 📄 [Read the narrative](CS499_Milestone_Two_Narrative.docx)
 - 💻 [Download the code (original and enhanced)](CS499_Milestone_Two_Enhancement_One.zip) — the enhanced React application is in `enhanced_code/travlr/app_react/`
+- 
+## Enhancement Two: Algorithms and Data Structures
+
+For this enhancement, I added an algorithmic search and recommendation layer to the Travlr Getaways application. The work includes a stable merge sort implemented from scratch with a tested stability guarantee, field-weighted relevance search over tokenized queries with no user-derived regular expressions, cursor-based pagination that resumes deterministically even as the underlying data changes, and a top-k recommendation engine that pairs a hash-map index with a bounded min-heap for O(n log k) selection, scoring similarity with inverse-document-frequency weighting so destination clusters emerge from vocabulary alone. The trip catalog was expanded to twenty-seven trips across four destination categories to make these behaviors observable, and the work is verified by thirty-six backend Jest tests, including integration tests that run the full Express and MongoDB pipeline against an in-memory database. The narrative details the design trade-offs and complexity analyses behind each choice.
+
+- 📄 [Read the narrative](CS499_Milestone_Three_Narrative.docx)
+- 💻 [Download the code (original and enhanced)](CS499_Milestone_Three_Enhancement_Two.zip) — the algorithm modules are in `enhanced_code/travlr/app_api/algorithms/`
