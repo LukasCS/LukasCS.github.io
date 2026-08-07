@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lukas Brkovic Leighton — Computer Science ePortfolio</title>
+<meta name="description" content="Computer Science ePortfolio for Southern New Hampshire University: professional self-assessment, code review, and three enhancements to the Travlr Getaways full-stack application.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <h1>Lukas Brkovic Leighton</h1>
+    <p class="subtitle">Computer Science ePortfolio — Southern New Hampshire University</p>
+  </div>
+</header>
+<nav class="site-nav" aria-label="Section navigation">
+  <ul>
+    <li><a href="#self-assessment">Self-Assessment</a></li>
+    <li><a href="#code-review">Code Review</a></li>
+    <li><a href="#enhancement-one">Enhancement One</a></li>
+    <li><a href="#enhancement-two">Enhancement Two</a></li>
+    <li><a href="#enhancement-three">Enhancement Three</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="more.html">More Projects</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<section id="self-assessment" class="narrative-body">
+<h2>Professional Self-Assessment</h2>
+<p>I am completing the Bachelor of Science in Computer Science at Southern New Hampshire University, and this portfolio is the record of what I can build. Alongside my studies, I work as an AI rater with TELUS Digital, evaluating the response quality of a production AI search system for a major technology company; the work consists of judging relevance, quality, and guideline compliance, response by response, against detailed written standards. I have also designed, built, and operated multiplayer online games since childhood, and I maintain an active player base today on AetherSeed, a three-dimensional multiplayer game I run with an AI-driven content pipeline. My goal is to work in AI and machine learning engineering and to pursue a master's degree in artificial intelligence. Completing this program sharpened that direction. The coursework gave me breadth across software engineering, algorithms, databases, and security, and the capstone required me to integrate all of it into one production-quality system. The sections below introduce the skills I bring to a team; the enhanced artifact that follows this self-assessment provides the evidence.</p>
+<h3>Collaborating in a Team Environment</h3>
+<p>My clearest collaboration training comes from working inside a large, distributed team. At TELUS Digital, I work within a community of raters spread across many countries who must produce consistent judgments without ever meeting. Consistency is achieved through shared written guidelines, calibration exercises, and disciplined attention to updates, and contributing well in that structure is a daily exercise in aligning my work with a team standard rather than a personal one. At SNHU, every course included structured peer discussion in which I presented work in progress, critiqued the work of classmates, and revised my own based on their responses. In the capstone, I practiced collaboration in the form a professional team depends on most: documentation. I wrote developer-facing README files and contextual in-code comments for the next person who touches the code, recorded a code review video addressed to a reviewing audience of peers, and added closed captions to that video so it also serves viewers who are deaf, hard of hearing, or working in a second language.</p>
+<h3>Communicating With Stakeholders</h3>
+<p>Running live games has meant answering to the most demanding stakeholders I know: players. For years I have announced changes, explained decisions in plain language, gathered feedback, and shipped corrections when the feedback was right. Formal coursework built the professional register on top of that experience. In CS-340, I built the Grazioso Salvare dashboard for a specified client, translating the company's written business rules — filters for water, mountain, and disaster rescue dogs — into an interactive tool a non-programmer can operate. Across the capstone I produced a milestone narrative for each enhancement, written for an instructor and technical reviewers, and a code review video pitched to peers and a manager. I adjust the form of communication to the audience: prose for reviewers, a walkthrough for colleagues, plain language for users.</p>
+<h3>Data Structures and Algorithms</h3>
+<p>I choose data structures by measured trade-off, not by habit. In CS-300, I built a course-planning tool in C++ after comparing vectors, hash tables, and binary search trees on runtime and memory cost with Big-O analysis, then implemented the planner on a balanced binary search tree so course listings emerged already sorted. In CS-370, I implemented a deep Q-learning training algorithm for a maze-navigation agent: a neural network with experience replay and target values, epsilon-greedy exploration restricted to valid actions, and a training loop with two convergence criteria, which reached a one hundred percent completion rate from every free starting cell. Those projects, both outside this portfolio's artifact, show the same habit the capstone deepened — justify the structure, measure the cost, and prove the result with tests.</p>
+<h3>Software Engineering and Databases</h3>
+<p>My engineering foundation is full-stack. In CS-465, I built a complete MEAN-stack travel application — the same application this portfolio enhances — with a customer site, an administrative single-page application, and a JWT-secured REST API. In CS-340, I paired MongoDB with a reusable, documented Python CRUD module and a dashboard under the model-view-controller pattern. CS-320 built my testing discipline: I delivered three Java backend services with complete JUnit 5 test suites covering positive, negative, boundary, and exception cases, reaching one hundred percent line and branch coverage on the key classes (<em>JUnit User Guide</em>, n.d.). Outside coursework, AetherSeed is engineering at production scale: a TypeScript monorepo with schemas shared between client and server, an authoritative game server, and strict validation that accepts AI-generated content only as checked data, never as code. I am currently completing CS-360 alongside the capstone, building an Android inventory application in Java.</p>
+<h3>Security</h3>
+<p>I treat security as a starting assumption rather than a final step. In CS-305, I assessed and hardened a financial consulting application: I ran dependency vulnerability scans with OWASP Dependency-Check, added SHA-256 checksum verification for data integrity, and configured HTTPS so traffic moved encrypted. The working habits that project built — dependencies are attack surface, integrity is verified rather than assumed, transport is encrypted — have followed me since, and I use the community standards published by the OWASP Foundation (2025) as working checklists rather than reading material. In CS-465, I implemented JWT authentication with tests proving that unauthenticated requests are refused. Operating internet-facing game servers adds a practical education no classroom provides: real, unsolicited adversarial traffic, which is why my servers validate everything and trust nothing a client sends.</p>
+<h3>How My Artifacts Fit Together</h3>
+<p>I chose to enhance a single artifact — Travlr Getaways, the full-stack travel application from CS-465 — in all three categories, because depth on one codebase shows something a scatter of small samples cannot: the ability to carry one system from front end to database at a professional standard. Enhancement One, in software design and engineering, replaced the Angular administrative application with a React 18 front end in strict TypeScript, consolidated duplicated forms into one shared, metadata-driven component, repaired the JWT middleware, and closed a stored cross-site scripting vector with a regression test that proves it stays closed. Enhancement Two, in algorithms and data structures, moved searching, sorting, and pagination to purpose-built server-side implementations: a stable merge sort, a bounded min-heap that selects the top results in O(n log k) time rather than sorting everything in O(n log n), field-weighted relevance scoring, and validated cursor pagination. Enhancement Three, in databases, pushed the work into the data layer itself: Mongoose schema validation, a weighted text index, an aggregation pipeline that executes search and statistics inside MongoDB (MongoDB, Inc., n.d.), a parity test proving the database engine and the application engine return identical orderings, role-based access control, and sanitization middleware that strips NoSQL injection operators.</p>
+<p>Together the three enhancements trace one path — an authenticated query traveling from the React front end, through sanitization middleware and the algorithm layer, down to the database indexes — and the portfolio presents that path directly: an architecture diagram, a narrative for each enhancement, the code review video where the plan began, and the original and enhanced code side by side. Collectively, this work demonstrates the five outcomes of the Computer Science program: collaborating around a shared codebase, communicating to distinct audiences, solving problems with justified algorithmic trade-offs, applying professional tools and techniques, and designing with a security mindset. The sections that follow show the work itself.</p>
+<h2>References</h2>
+<div class="references">
+<p><em>JUnit user guide</em>. (n.d.). <a href="https://docs.junit.org/current/user-guide/">https://docs.junit.org/current/user-guide/</a></p>
+<p>MongoDB, Inc. (n.d.). <em>Aggregation pipeline</em>. MongoDB Manual. <a href="https://www.mongodb.com/docs/manual/core/aggregation-pipeline/">https://www.mongodb.com/docs/manual/core/aggregation-pipeline/</a></p>
+<p>OWASP Foundation. (2025). <em>OWASP Top Ten</em>. <a href="https://owasp.org/www-project-top-ten/">https://owasp.org/www-project-top-ten/</a></p>
+</div>
+</section>
+
+<section id="code-review">
+<h2>Code Review</h2>
+<div class="video-wrap">
+<iframe src="https://www.youtube-nocookie.com/embed/vk7CnHw5FRs" title="CS-499 Code Review: Travlr Getaways" allowfullscreen loading="lazy"></iframe>
+</div>
+<p class="video-meta">Updated with optional closed captions for accessibility.</p>
+<p class="video-meta">Fallback link — Watch on YouTube: <a href="https://youtu.be/vk7CnHw5FRs">https://youtu.be/vk7CnHw5FRs</a></p>
+<p>The review walks the original code in three categories and lays out the enhancement plan the portfolio executes.</p>
+</section>
+
+<section id="enhancement-one">
+<h2>Enhancement One: Software Design and Engineering</h2>
+<p>Migrated the administrative single-page application from Angular to React 18 with strict TypeScript; refactored the Express backend around centralized error-handling middleware; eliminated approximately 240 lines of duplicated form code with a shared metadata-driven component; moved the edit workflow from hidden localStorage state to URL route parameters; closed a stored XSS vector and an unauthenticated DELETE route; verified by a Jest and React Testing Library suite.</p>
+
+<div class="figure-pair">
+  <figure>
+    <img src="assets/img/screenshots/before/before-admin-listing.png" alt="Before: the original Angular admin trip listing page.">
+    <figcaption>Before: the original Angular admin trip listing.</figcaption>
+  </figure>
+  <figure>
+    <img src="assets/img/screenshots/after/after-admin-listing.png" alt="After: the React 18 admin trip listing page with the same Trips view rebuilt in strict TypeScript.">
+    <figcaption>After: the React 18 admin trip listing, rebuilt in strict TypeScript.</figcaption>
+  </figure>
+</div>
+
+<ul class="enhancement-links">
+  <li><a href="narratives/enhancement-one.html">Read the full narrative</a></li>
+  <li><a href="CS499_Milestone_Two_Enhancement_One.zip">Download the code (original + enhanced)</a></li>
+  <li><a href="CS499_Milestone_Two_Narrative.docx">Download the narrative (Word)</a></li>
+</ul>
+</section>
+
+<section id="enhancement-two">
+<h2>Enhancement Two: Algorithms and Data Structures</h2>
+<p>Added an algorithmic search and recommendation layer: stable merge sort implemented from scratch with a tested stability guarantee; field-weighted relevance search over tokenized queries with no user-derived regular expressions; cursor-based pagination that resumes deterministically as data changes; top-k recommendations pairing a hash-map index with a bounded min-heap for O(n log k) selection with IDF-weighted similarity; catalog expanded to 27 trips across four destination categories; verified by 36 backend Jest tests including integration tests against an in-memory MongoDB.</p>
+
+<div class="figure-pair">
+  <figure>
+    <img src="assets/img/screenshots/before/before-admin-listing.png" alt="Before: the original trip listing with no search, sort, or pagination controls.">
+    <figcaption>Before: the original listing had no search, sort, or pagination.</figcaption>
+  </figure>
+  <figure>
+    <img src="assets/img/screenshots/after/after-search.png" alt="After: the trip listing with a search box, sort selector, and cursor-based pagination.">
+    <figcaption>After: server-side search, sort, and cursor-based pagination.</figcaption>
+  </figure>
+</div>
+
+<figure class="single">
+  <img src="assets/img/screenshots/after/after-recommendations.png" alt="Top-k recommendation panel showing trips similar to a chosen seed trip, ranked by similarity score.">
+  <figcaption>Top-k recommendations selected by a bounded min-heap with IDF-weighted similarity scores.</figcaption>
+</figure>
+
+<ul class="enhancement-links">
+  <li><a href="narratives/enhancement-two.html">Read the full narrative</a></li>
+  <li><a href="CS499_Milestone_Three_Enhancement_Two.zip">Download the code (original + enhanced)</a></li>
+  <li><a href="CS499_Milestone_Three_Narrative.docx">Download the narrative (Word)</a></li>
+</ul>
+</section>
+
+<section id="enhancement-three">
+<h2>Enhancement Three: Databases</h2>
+<p>Moved the data layer onto database-side foundations: MongoDB aggregation pipeline behind an engine switch (?engine=db|app) with an automated parity test proving identical orderings; Mongoose schema validation (numeric prices with range checks, unique uppercase trip codes, image fields restricted to bare filenames); weighted full-text index (name &times;3, resort &times;2, description &times;1) mirroring the application engine's weights; catalog statistics endpoint (GET /trips/stats); role-based access control restricting mutating routes to an admin JWT claim; NoSQL-injection sanitization middleware; CORS tightened to a single origin.</p>
+
+<figure class="single">
+  <img src="assets/img/screenshots/after/after-validation.png" alt="Schema-mirrored form validation rejecting a negative per-person price before the request reaches the API.">
+  <figcaption>Mongoose schema validation rejecting a negative per-person price.</figcaption>
+</figure>
+
+<div class="figure-pair">
+  <figure>
+    <img src="assets/img/narrative-media/enh3-02.png" alt="The trip listing for a standard authenticated user, with no Add Trip button rendered because role-based access control withholds administrative controls.">
+    <figcaption>Before promotion: a standard user has no Add Trip control.</figcaption>
+  </figure>
+  <figure>
+    <img src="assets/img/narrative-media/enh3-03.png" alt="The same trip listing after the account was promoted to the admin role, now showing an Add Trip button enabled by the role claim in the new token.">
+    <figcaption>After promotion: the admin role claim enables Add Trip.</figcaption>
+  </figure>
+</div>
+
+<ul class="enhancement-links">
+  <li><a href="narratives/enhancement-three.html">Read the full narrative</a></li>
+  <li><a href="CS499_Milestone_Four_Enhancement_Three.zip">Download the code (original + enhanced)</a></li>
+  <li><a href="CS499_Milestone_Four_Narrative.docx">Download the narrative (Word)</a></li>
+</ul>
+</section>
+
+<section id="architecture">
+<h2>Architecture</h2>
+<p>The diagram below was recommended by the course instructor and traces one authenticated query end to end.</p>
+<a class="diagram-link" href="assets/img/CS499_Data_Flow_Diagram.svg">
+  <img src="assets/img/CS499_Data_Flow_Diagram.png" alt="Architecture diagram tracing an authenticated query from the React frontend, through CORS and NoSQL-injection sanitization middleware, into either the MongoDB aggregation-pipeline engine or the application algorithm engine, through Mongoose schema validation, down to the MongoDB indexes, and back to the browser as JSON.">
+</a>
+
+<details class="alignment">
+<summary>Code review &rarr; final code: alignment table</summary>
+<div class="table-scroll">
+<table class="alignment-table">
+<thead>
+<tr><th>#</th><th>Issue or plan stated in the code review</th><th>Delivered in the final code</th><th>Status</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>CORS wildcard (<code>Access-Control-Allow-Origin: '*'</code>) lets any site call the API</td><td><code>app.js</code> lines 33-45 &mdash; origin now comes from <code>ALLOWED_ORIGIN</code> env var (default <code>http://localhost:4200</code>), no wildcard; comment explicitly ties the fix to the code-review finding</td><td>Delivered</td></tr>
+<tr><td>2</td><td>DELETE <code>/trips/:tripCode</code> route has no <code>authenticateJWT</code>, so anyone can delete trips</td><td><code>app_api/routes/index.js</code> &mdash; <code>.delete(requireAdmin, tripsController.tripsDeleteTrip)</code>, <code>requireAdmin = [authenticateJWT, requireRole('admin')]</code></td><td>Delivered</td></tr>
+<tr><td>3</td><td>Bug: <code>res.json(err)</code> references an <code>err</code> variable never defined in the function (lines 21, 45, 78, 119 of old <code>trips.js</code>), which would crash the server</td><td><code>app_api/controllers/trips.js</code> &mdash; every handler wrapped in <code>asyncHandler</code> (<code>app_api/middleware/asyncHandler.js</code>); errors are thrown as <code>ApiError</code> and resolved centrally, no undefined-variable path remains</td><td>Delivered</td></tr>
+<tr><td>4</td><td><code>tripsAddTrip</code> takes every field straight from <code>req.body</code> with no validation, allowing bad/dangerous data into the DB</td><td><code>app_api/controllers/trips.js</code> <code>tripsAddTrip</code>/<code>tripsUpdateTrip</code> rely on Mongoose schema validation (<code>app_api/models/travlr.js</code>) &mdash; a <code>ValidationError</code> is thrown and translated to HTTP 400 by the error handler</td><td>Delivered</td></tr>
+<tr><td>5</td><td>Lack of documentation: comments describe what an endpoint does but not data formats or error behavior</td><td><code>app_api/controllers/trips.js</code>, <code>tripsQuery.js</code>, <code>tripsDb.js</code>, all <code>app_api/middleware/*.js</code>, and <code>app_api/models/*.js</code> carry file-level and function-level comments explaining data shape, validation rules, and error/complexity behavior</td><td>Delivered</td></tr>
+<tr><td>6</td><td>Enhancement: rebuild the Angular admin panel in React + TypeScript, mapping signals/reactive forms/trip-data service to <code>useState</code>/<code>useEffect</code>, controlled forms, and an Axios module with interceptors</td><td><code>app_react/</code> &mdash; <code>package.json</code> lists <code>react@18.3.1</code>; <code>src/pages/TripListing.tsx</code> uses <code>useState</code>/<code>useEffect</code>/<code>useCallback</code>; <code>src/pages/AddTrip.tsx</code> and <code>EditTrip.tsx</code> use controlled form state; <code>src/api/client.ts</code> is an Axios instance with request/response interceptors that attach the bearer token and clear it on 401, explicitly documented as replacing <code>TripDataService</code> + <code>JwtInterceptor</code></td><td>Delivered</td></tr>
+<tr><td>7</td><td>Enhancement: fix the Express backend with proper error handling and a central error-handling place</td><td><code>app_api/middleware/errorHandler.js</code> (<code>ApiError</code>, <code>notFoundHandler</code>, <code>errorHandler</code>) and <code>app_api/middleware/asyncHandler.js</code>, wired into <code>app_api/routes/index.js</code> (<code>router.use(notFoundHandler); router.use(errorHandler);</code>)</td><td>Delivered</td></tr>
+<tr><td>8</td><td>Enhancement: add clear comments throughout the code</td><td>Confirmed across <code>app_api/controllers/*.js</code>, <code>app_api/middleware/*.js</code>, <code>app_api/algorithms/*.js</code>, and <code>app_api/models/*.js</code> &mdash; every file opens with a rationale comment and functions carry explanatory/complexity notes</td><td>Delivered</td></tr>
+<tr><td>9</td><td>Enhancement: add automated tests</td><td><code>app_api/__tests__/database.integration.test.js</code>, <code>app_api/__tests__/endpoints.integration.test.js</code>, <code>app_api/algorithms/__tests__/algorithms.test.js</code> (mergeSort, BoundedMinHeap, relevance scoring, cursors), and <code>app_react/src/__tests__/</code> (<code>TripCard.test.tsx</code>, <code>TripForm.test.tsx</code>, <code>TripListing.test.tsx</code>, <code>token-storage.test.ts</code>)</td><td>Delivered</td></tr>
+<tr><td>10</td><td>Issue: no search, sort, filter, or pagination &mdash; <code>Model.find({})</code> loads the entire collection every time</td><td>Superseded by <code>app_api/controllers/tripsQuery.js</code> (<code>tripsSearch</code>) and <code>app_api/controllers/tripsDb.js</code> (<code>runDbSearch</code>), both of which support search, sort, and cursor pagination</td><td>Delivered</td></tr>
+<tr><td>11</td><td>Issue: frontend <code>getTrips()</code> sends a plain GET with no search/sort/page params</td><td><code>app_react/src/api/trip-api.ts</code> and <code>app_react/src/pages/TripListing.tsx</code> build query params (<code>search</code>, <code>sortBy</code>, <code>order</code>, <code>limit</code>, <code>cursor</code>) against <code>/api/trips/search</code></td><td>Delivered</td></tr>
+<tr><td>12</td><td>Issue: no optimized data structures for search/ranking; would need to scan every trip one by one for a price filter</td><td><code>app_api/algorithms/minHeap.js</code> (bounded min-heap for top-k) and <code>app_api/algorithms/relevance.js</code> (scoring/IDF) provide the missing structures; <code>tripsDb.js</code> additionally pushes ranking into MongoDB's text index</td><td>Delivered</td></tr>
+<tr><td>13</td><td>Enhancement: merge sort for sorting trips by price, length, or date (O(n log n))</td><td><code>app_api/algorithms/mergeSort.js</code> &mdash; stable, recursive merge sort with documented O(n log n) time / O(n) space; used by <code>tripsQuery.js</code>'s application engine (<code>sortBy</code> supports <code>price</code>, <code>start</code>, <code>name</code>, <code>relevance</code>)</td><td>Delivered</td></tr>
+<tr><td>14</td><td>Enhancement: search where a name match ranks higher than a description-only match</td><td><code>app_api/algorithms/relevance.js</code> <code>scoreTripAgainstQuery</code> &mdash; weights name 3, resort 2, description 1, plus a prefix-match bonus</td><td>Delivered</td></tr>
+<tr><td>15</td><td>Enhancement: pagination, e.g. 10 trips per page instead of loading everything</td><td><code>app_api/algorithms/cursor.js</code> (<code>encodeCursor</code>/<code>decodeCursor</code>) plus cursor-based paging logic in both <code>tripsQuery.js</code> and <code>tripsDb.js</code> (<code>DEFAULT_LIMIT</code>/<code>MAX_LIMIT</code>, <code>nextCursor</code>)</td><td>Delivered</td></tr>
+<tr><td>16</td><td>Enhancement: recommendation feature using a hash map for preference lookups and a priority queue (min-heap) to keep the top 5 matches, O(n log k)</td><td><code>app_api/controllers/tripsQuery.js</code> <code>tripsRecommendations</code> &mdash; builds a <code>Map</code> (<code>byCode</code>) for O(1) lookup and uses <code>BoundedMinHeap</code> (<code>app_api/algorithms/minHeap.js</code>) sized to <code>k</code> for O(n log k) top-k selection</td><td>Delivered</td></tr>
+<tr><td>17</td><td><code>perPerson</code> field is typed <code>String</code>, so prices can't be summed, averaged, or sorted numerically</td><td><code>app_api/models/travlr.js</code> &mdash; <code>perPerson: { type: Number, required: ..., min: 0, max: 1000000 }</code>; comment explicitly cites the code-review finding</td><td>Delivered</td></tr>
+<tr><td>18</td><td>Issue: user schema has no <code>role</code> field, so every logged-in user has equal access</td><td><code>app_api/models/user.js</code> &mdash; <code>role: { type: String, enum: ['user', 'admin'], default: 'user' }</code>, embedded in the JWT via <code>generateJWT</code></td><td>Delivered</td></tr>
+<tr><td>19</td><td>Issue: no input validation/sanitization on trip creation &mdash; described in the script as a NoSQL injection vulnerability</td><td><code>app_api/middleware/sanitizeInputs.js</code> strips any key starting with <code>$</code> or containing <code>.</code> from <code>req.body</code>/<code>req.params</code>/<code>req.query</code>; wired globally for <code>/api</code> in <code>app.js</code> (<code>app.use('/api', sanitizeInputs)</code>)</td><td>Delivered</td></tr>
+<tr><td>20</td><td>Issue: database queries use only basic CRUD &mdash; no aggregation, no text search indexes, no optimized multi-field indexes</td><td><code>app_api/controllers/tripsDb.js</code> <code>runCatalogStats</code>/<code>runDbSearch</code> use <code>$facet</code>, <code>$group</code>, <code>$bucket</code>, <code>$text</code>; <code>app_api/models/travlr.js</code> adds a weighted text index (<code>trip_text_weighted</code>) and a unique index on <code>code</code></td><td>Delivered</td></tr>
+<tr><td>21</td><td>Enhancement: aggregation pipelines for stats like average price per destination / trip counts per resort</td><td><code>app_api/controllers/tripsDb.js</code> <code>runCatalogStats</code> &mdash; <code>$group</code> computes <code>avgPrice</code>/<code>minPrice</code>/<code>maxPrice</code>/<code>count</code> by star rating and overall, plus <code>$bucket</code> price bands; exposed via <code>GET /api/trips/stats</code> (<code>tripsQuery.js</code> <code>tripsStats</code>, routed in <code>app_api/routes/index.js</code>)</td><td>Delivered</td></tr>
+<tr><td>22</td><td>Enhancement: fix the trip model &mdash; <code>perPerson</code> to <code>Number</code>, plus validation (name length limit, positive price)</td><td><code>app_api/models/travlr.js</code> &mdash; <code>perPerson</code> is <code>Number</code> with <code>min</code>/<code>max</code>; <code>name</code> has <code>maxlength: 120</code>; <code>code</code>, <code>resort</code>, <code>description</code>, <code>image</code> all carry <code>maxlength</code>/<code>match</code> validators</td><td>Delivered</td></tr>
+<tr><td>23</td><td>Enhancement: text search indexes over trip names and descriptions</td><td><code>app_api/models/travlr.js</code> &mdash; <code>tripSchema.index({ name: 'text', resort: 'text', description: 'text' }, { weights: { name: 3, resort: 2, description: 1 }, name: 'trip_text_weighted' })</code>, used by <code>tripsDb.js</code>'s <code>$text</code> search stage</td><td>Delivered</td></tr>
+<tr><td>24</td><td>Enhancement: role-based access control &mdash; admins can create/edit/delete, regular users can only view</td><td><code>app_api/middleware/requireRole.js</code> combined with <code>authenticateJWT</code> as <code>requireAdmin</code> in <code>app_api/routes/index.js</code>; applied to POST/PUT/DELETE <code>/trips</code> routes while GET routes stay public</td><td>Delivered</td></tr>
+<tr><td>25</td><td>Enhancement: input sanitization to prevent NoSQL injection by stripping <code>$</code>-prefixed/dotted operator keys before they reach a query</td><td><code>app_api/middleware/sanitizeInputs.js</code> &mdash; <code>sanitizeValue</code> recursively drops any key starting with <code>$</code> or containing <code>.</code> from body/params/query before the request reaches any controller</td><td>Delivered</td></tr>
+</tbody>
+</table>
+</div>
+</details>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <a href="https://github.com/LukasCS">GitHub: LukasCS</a>
+    <a href="more.html">More Projects</a>
+    <span>Travlr Getaways is the capstone artifact from CS-465, enhanced across three categories for CS-499.</span>
+  </div>
+</footer>
+
+</body>
+</html>

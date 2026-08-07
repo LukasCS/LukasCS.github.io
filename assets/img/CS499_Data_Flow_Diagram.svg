@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300 1290" font-family="Segoe UI, Arial, Helvetica, sans-serif">
+  <title>Travlr Getaways data-flow diagram</title>
+  <desc>High-level architecture diagram tracing an authenticated query from the React frontend, through CORS and NoSQL-injection sanitization middleware, into either the MongoDB aggregation-pipeline engine or the application algorithm engine, through Mongoose schema validation, down to the MongoDB indexes, and back to the browser as JSON.</desc>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#059669"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1300" height="1290" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="620" y="42" text-anchor="middle" font-size="24" font-weight="700" fill="#0f172a">Travlr Getaways — Data Flow of an Authenticated Query</text>
+  <text x="620" y="68" text-anchor="middle" font-size="14" fill="#475569">From the React frontend, through the sanitization middleware and aggregation pipeline, down to the MongoDB indexes</text>
+
+  <!-- A: Client -->
+  <rect x="320" y="92" width="600" height="104" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+  <text x="620" y="118" text-anchor="middle" font-size="16" font-weight="700" fill="#1e3a8a">React 18 + TypeScript SPA — app_react/ (Vite)</text>
+  <text x="620" y="142" text-anchor="middle" font-size="13" fill="#334155">User signs in → the server returns a signed JWT carrying a role claim</text>
+  <text x="620" y="162" text-anchor="middle" font-size="13" fill="#334155">Every API call carries the header  Authorization: Bearer &lt;token&gt;</text>
+  <text x="620" y="182" text-anchor="middle" font-size="13" fill="#334155">Admin controls render only for the admin role — the server still re-checks</text>
+
+  <!-- A -> B -->
+  <line x1="620" y1="196" x2="620" y2="248" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="636" y="228" font-size="13" fill="#475569">HTTPS  GET /api/trips/search?search=reef&amp;engine=db</text>
+
+  <!-- B: Express entry -->
+  <rect x="320" y="252" width="600" height="78" rx="10" fill="#f8fafc" stroke="#64748b" stroke-width="2"/>
+  <text x="620" y="278" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">Express server — app.js</text>
+  <text x="620" y="302" text-anchor="middle" font-size="13" fill="#334155">CORS gate: only the configured SPA origin may make cross-origin /api calls</text>
+
+  <!-- B -> C -->
+  <line x1="620" y1="330" x2="620" y2="374" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- C: Sanitization -->
+  <rect x="250" y="378" width="740" height="100" rx="10" fill="#fffbeb" stroke="#d97706" stroke-width="2"/>
+  <text x="620" y="404" text-anchor="middle" font-size="16" font-weight="700" fill="#92400e">NoSQL-injection sanitization — app_api/middleware/sanitizeInputs.js</text>
+  <text x="620" y="428" text-anchor="middle" font-size="13" fill="#334155">Runs on every /api request, before any route or controller</text>
+  <text x="620" y="448" text-anchor="middle" font-size="13" fill="#334155">Drops every key that starts with “$” or contains “.” from body, query, and params —</text>
+  <text x="620" y="466" text-anchor="middle" font-size="13" fill="#334155">MongoDB operator syntax can never travel from the network into a query object</text>
+
+  <!-- C -> D -->
+  <line x1="620" y1="478" x2="620" y2="520" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- D: Router -->
+  <rect x="320" y="524" width="600" height="76" rx="10" fill="#f8fafc" stroke="#64748b" stroke-width="2"/>
+  <text x="620" y="550" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">API router — app_api/routes/index.js</text>
+  <text x="620" y="574" text-anchor="middle" font-size="13" fill="#334155">Centralized JSON error handling wraps every route below</text>
+
+  <!-- D -> branches -->
+  <path d="M 620 600 L 620 622 L 340 622 L 340 648" fill="none" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 620 600 L 620 622 L 920 622 L 920 648" fill="none" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Left branch: read path -->
+  <rect x="60" y="652" width="560" height="290" rx="10" fill="#f0fdfa" stroke="#0d9488" stroke-width="2"/>
+  <text x="340" y="678" text-anchor="middle" font-size="15" font-weight="700" fill="#115e59">Read path (public) — GET /trips/search · /stats · /recommendations</text>
+  <text x="340" y="700" text-anchor="middle" font-size="13" fill="#334155">tripsQuery.js controller — engine switch  ?engine=db | app  (db is the default)</text>
+
+  <rect x="84" y="716" width="512" height="104" rx="8" fill="#ffffff" stroke="#0d9488" stroke-width="1.5"/>
+  <text x="340" y="738" text-anchor="middle" font-size="13.5" font-weight="700" fill="#115e59">Database engine — tripsDb.js (Enhancement Three)</text>
+  <text x="340" y="760" text-anchor="middle" font-size="12.5" fill="#334155">MongoDB aggregation pipeline, executed inside the database:</text>
+  <text x="340" y="780" text-anchor="middle" font-size="12.5" fill="#334155">$match { $text } → $addFields textScore ($meta) → $facet {</text>
+  <text x="340" y="798" text-anchor="middle" font-size="12.5" fill="#334155">total count  ·  page: cursor $match → $sort (collation) → $limit }</text>
+
+  <rect x="84" y="832" width="512" height="94" rx="8" fill="#ffffff" stroke="#0d9488" stroke-width="1.5"/>
+  <text x="340" y="854" text-anchor="middle" font-size="13.5" font-weight="700" fill="#115e59">Application engine — algorithms/ (Enhancement Two)</text>
+  <text x="340" y="876" text-anchor="middle" font-size="12.5" fill="#334155">Field-weighted relevance scoring → stable merge sort O(n log n)</text>
+  <text x="340" y="894" text-anchor="middle" font-size="12.5" fill="#334155">or bounded min-heap top-k O(n log k) → validated cursor pagination</text>
+  <text x="340" y="912" text-anchor="middle" font-size="12.5" fill="#334155">Kept selectable for the documented engine-parity comparison</text>
+
+  <!-- Right branch: write path -->
+  <rect x="660" y="652" width="520" height="290" rx="10" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="920" y="678" text-anchor="middle" font-size="15" font-weight="700" fill="#5b21b6">Write path (admin only) — POST · PUT · DELETE /trips</text>
+
+  <rect x="684" y="696" width="472" height="66" rx="8" fill="#ffffff" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="920" y="718" text-anchor="middle" font-size="13.5" font-weight="700" fill="#5b21b6">authenticateJWT — middleware/authenticateJWT.js</text>
+  <text x="920" y="740" text-anchor="middle" font-size="12.5" fill="#334155">Verifies the Bearer token’s signature and expiry; failures return 401</text>
+
+  <line x1="920" y1="762" x2="920" y2="782" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="684" y="786" width="472" height="66" rx="8" fill="#ffffff" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="920" y="808" text-anchor="middle" font-size="13.5" font-weight="700" fill="#5b21b6">requireRole('admin') — middleware/requireRole.js</text>
+  <text x="920" y="830" text-anchor="middle" font-size="12.5" fill="#334155">Reads the role claim from the verified JWT; non-admins receive 403</text>
+
+  <line x1="920" y1="852" x2="920" y2="872" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="684" y="876" width="472" height="50" rx="8" fill="#ffffff" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="920" y="897" text-anchor="middle" font-size="13.5" font-weight="700" fill="#5b21b6">trips.js controller — create · update · delete</text>
+  <text x="920" y="915" text-anchor="middle" font-size="12.5" fill="#334155">Reached only after both checks pass</text>
+
+  <!-- Branches -> E -->
+  <path d="M 340 942 L 340 968 L 620 968 L 620 988" fill="none" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 920 942 L 920 968 L 620 968" fill="none" stroke="#475569" stroke-width="2"/>
+
+  <!-- E: Mongoose -->
+  <rect x="290" y="992" width="660" height="96" rx="10" fill="#f8fafc" stroke="#64748b" stroke-width="2"/>
+  <text x="620" y="1018" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">Mongoose model — app_api/models/travlr.js</text>
+  <text x="620" y="1042" text-anchor="middle" font-size="13" fill="#334155">Schema validation at the database boundary: perPerson is a Number ≥ 0,</text>
+  <text x="620" y="1062" text-anchor="middle" font-size="13" fill="#334155">trip code matches ^[A-Z0-9]{4,12}$ and is unique, image accepts a bare filename only</text>
+
+  <!-- E -> F -->
+  <line x1="620" y1="1088" x2="620" y2="1128" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- F: MongoDB -->
+  <rect x="290" y="1132" width="660" height="110" rx="10" fill="#ecfdf5" stroke="#059669" stroke-width="2"/>
+  <text x="620" y="1158" text-anchor="middle" font-size="16" font-weight="700" fill="#065f46">MongoDB — trips collection</text>
+  <text x="620" y="1182" text-anchor="middle" font-size="13" fill="#334155">trip_text_weighted text index: name ×3 · resort ×2 · description ×1</text>
+  <text x="620" y="1202" text-anchor="middle" font-size="13" fill="#334155">(weights deliberately mirror the application engine’s field weights)</text>
+  <text x="620" y="1222" text-anchor="middle" font-size="13" fill="#334155">unique index on code — duplicate trip codes are impossible</text>
+
+  <!-- Return path -->
+  <path d="M 950 1187 L 1215 1187 L 1215 144 L 924 144" fill="none" stroke="#059669" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrowGreen)"/>
+  <text x="1233" y="660" font-size="13" fill="#047857" transform="rotate(-90 1233 660)">JSON results + nextCursor → rendered in the React UI</text>
+</svg>

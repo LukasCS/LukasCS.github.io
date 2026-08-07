@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enhancement One Narrative — Lukas Brkovic Leighton</title>
+<meta name="description" content="Milestone narrative for Enhancement One: migrating the Travlr Getaways admin SPA from Angular to React 18 with TypeScript.">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <p class="site-title-link"><a class="site-title-link" href="../index.html">Lukas Brkovic Leighton</a></p>
+    <p class="subtitle">Computer Science ePortfolio — Southern New Hampshire University</p>
+  </div>
+</header>
+
+<main class="narrative-body">
+<p class="lead-in">Milestone narrative, submitted as graded coursework.</p>
+<p><a href="../CS499_Milestone_Two_Narrative.docx">Download the Word original: CS499_Milestone_Two_Narrative.docx</a></p>
+
+<h1>Milestone Two Narrative: Enhancement One, Software Design and Engineering</h1>
+<h2>Artifact Description</h2>
+<p>The artifact for this enhancement is Travlr Getaways, the full stack travel booking application I built in CS 465: Full Stack Development I earlier in the Computer Science program. The application follows the MEAN stack architecture: a MongoDB database accessed through Mongoose, an Express and Node.js backend that exposes a RESTful API, a server-rendered Handlebars site for customers, and a single-page administration application originally written in Angular. The admin SPA allows authenticated administrators to list, add, and edit trip packages, with authentication handled through JSON Web Tokens issued by the Express API.</p>
+<h2>Justification and Improvements</h2>
+<p>I selected this artifact because it is the most complete full stack system I built in the program, which makes it the strongest possible canvas for demonstrating software design and engineering skill. A migration between frontend frameworks is also a genuinely representative industry task: it cannot be completed by pattern matching on syntax, because it requires understanding what each piece of the original architecture is responsible for and then choosing the idiomatic equivalent in the target ecosystem. That architectural mapping is exactly what this enhancement showcases.</p>
+<p>The enhancement replaced the Angular admin SPA with a new React 18 application written entirely in TypeScript and built with Vite, while preserving every original feature against the same Express API. Each Angular construct was deliberately mapped to a React counterpart: the injectable TripDataService that returned RxJS Observables became a typed, Promise-based API layer consumed with async and await; the JwtInterceptor class registered through the HTTP_INTERCEPTORS provider became request and response interceptors on a centralized Axios instance, with the response interceptor adding 401 handling the original never had; the root-provided AuthenticationService became a React Context with a useAuth hook; and component state moved from Angular signals and lifecycle methods to useState and useEffect hooks (Meta Open Source, n.d.; Axios, n.d.).</p>
+<p>The migration also corrected several design weaknesses found in my Milestone One code review. The add-trip and edit-trip components previously duplicated an identical nine-field reactive form across roughly 240 lines; both pages now render a single shared TripForm component whose validation is driven by field metadata. The edit workflow previously passed the selected trip code between components by stashing it in localStorage, which made edit pages impossible to bookmark or refresh; the code now travels in the URL as a route parameter, as shown in Figure 2. The login component previously polled with a three-second timer because the authentication service saved the token outside the component, a race condition that disappears entirely now that login resolves as a Promise. The original template also bound trip descriptions with innerHTML, a stored cross-site scripting vector that React closes by escaping rendered text, and I wrote a regression test that proves a script payload renders as inert text. Escaping also surfaced legacy HTML markup embedded in the seed data, which was cleaned so that content and presentation are properly separated. On the backend, I centralized Express error handling into dedicated middleware, wrapped every controller in an asyncHandler so rejected promises reach that middleware instead of crashing the process, fixed the undefined error variable referenced in every failure branch of the trips controller, repaired the JWT middleware so it no longer calls next() after rejecting an invalid token, and protected the previously unauthenticated DELETE route. End-to-end integration testing of the migrated frontend against the live API also exposed and fixed a latent defect in the original backend, which never answered CORS preflight OPTIONS requests. The enhancement is verified by a sixteen-test Jest and React Testing Library suite covering token handling, component rendering, and form validation, and the TypeScript compiler passes in strict mode. Figure 1 shows the completed React application running against the live Express API in an authenticated session.</p>
+<h2>Figure 1</h2>
+<p><em>The React admin SPA displaying trips from the live Express API in an authenticated session.</em></p>
+<img src="../assets/img/narrative-media/enh1-01.png" alt="Screenshot of the React admin single-page app at localhost:4200 showing the Trips listing page with an Add Trip button, a Log Out link, and three trip cards (Gale Reef, Dawson's Reef, Claire's Reef), each with a photo, resort/star rating, price, and an Edit Trip button.">
+<h2>Figure 2</h2>
+<p><em>The edit view with the trip code carried as a URL route parameter and the form populated from the API.</em></p>
+<img src="../assets/img/narrative-media/enh1-02.png" alt="Screenshot of the React Edit Trip form at the URL /edit-trip/GALR210214, showing the trip code carried as a route parameter and input fields for Code, Name, Length, Start date, Resort, Per Person price, Image Name, and Description, with a Save button.">
+<h2>Course Outcome Progress</h2>
+<p>This enhancement meets the outcomes I planned for it in Module One. It demonstrates Course Outcome 4, the use of well-founded and innovative techniques, skills, and tools in computing practice, through the disciplined adoption of an industry-standard toolchain: React with hooks, strict TypeScript, Axios interceptors, Vite, and automated testing. It also supports Course Outcome 1, building collaborative environments, because the artifact is structured for other developers: the repository now includes a README with a table that maps every Angular construct to its React replacement, the shared form component documents why the duplication was removed, and the typed interfaces make the data contract explicit for anyone who joins the codebase. One update to my coverage plan is worth noting: fixing the unauthenticated DELETE route and the JWT middleware defects during this enhancement gives me early progress toward Course Outcome 5, the security mindset, which I had scheduled primarily for Enhancement Three. My overall outcome-coverage plan is otherwise unchanged.</p>
+<h2>Reflection</h2>
+<p>The most valuable learning in this enhancement came from translating intent rather than syntax. Angular and React answer the same questions, such as where shared state lives, how cross-cutting concerns like authentication headers are applied, and how a component reacts to data arriving, with very different mechanisms, and the migration forced me to articulate what each Angular pattern was actually for before I could choose its React equivalent. Replacing a dependency injection container with module boundaries and a Context provider, for example, only works cleanly once the responsibility of each injected service is understood in isolation.</p>
+<p>The biggest challenge was resisting the temptation to transliterate. My first instinct was to reproduce the Angular structure file by file, which would have carried its defects forward, including the duplicated forms and the localStorage coupling between components. Slowing down to redesign those seams produced a smaller and more testable application than the original. A second challenge was asynchronous state: React will warn about state updates on unmounted components, which forced me to add cleanup guards to every data-loading effect and, in the process, gave me a much more concrete understanding of the component lifecycle than the Angular subscription model ever demanded. Writing the Jest suite last confirmed a lesson from my code review research in Module Two: the components that were hardest to test were exactly the ones whose design I had not yet cleaned up, and testability turned out to be the most honest measure of the design itself.</p>
+<h2>References</h2>
+<div class="references">
+<p>Axios. (n.d.). <em>Interceptors</em>. Axios Documentation. <a href="https://axios-http.com/docs/interceptors">https://axios-http.com/docs/interceptors</a></p>
+<p>Meta Open Source. (n.d.). <em>Passing data deeply with context</em>. React Documentation. <a href="https://react.dev/learn/passing-data-deeply-with-context">https://react.dev/learn/passing-data-deeply-with-context</a></p>
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <a href="https://github.com/LukasCS">GitHub: LukasCS</a>
+    <a href="../more.html">More Projects</a>
+    <span>Travlr Getaways is the capstone artifact from CS-465, enhanced across three categories for CS-499.</span>
+  </div>
+</footer>
+
+</body>
+</html>
