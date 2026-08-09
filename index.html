@@ -21,6 +21,7 @@
     <li><a href="#enhancement-one">Enhancement One</a></li>
     <li><a href="#enhancement-two">Enhancement Two</a></li>
     <li><a href="#enhancement-three">Enhancement Three</a></li>
+    <li><a href="#final-polish">Final Polish</a></li>
     <li><a href="#architecture">Architecture</a></li>
     <li><a href="more.html">More Projects</a></li>
   </ul>
@@ -42,7 +43,7 @@
 <h3>Security</h3>
 <p>I treat security as a starting assumption rather than a final step. In CS-305, I assessed and hardened a financial consulting application: I ran dependency vulnerability scans with OWASP Dependency-Check, added SHA-256 checksum verification for data integrity, and configured HTTPS so traffic moved encrypted. The working habits that project built — dependencies are attack surface, integrity is verified rather than assumed, transport is encrypted — have followed me since, and I use the community standards published by the OWASP Foundation (2025) as working checklists rather than reading material. In CS-465, I implemented JWT authentication with tests proving that unauthenticated requests are refused. Operating internet-facing game servers adds a practical education no classroom provides: real, unsolicited adversarial traffic, which is why my servers validate everything and trust nothing a client sends.</p>
 <h3>How My Artifacts Fit Together</h3>
-<p>I chose to enhance a single artifact — Travlr Getaways, the full-stack travel application from CS-465 — in all three categories, because depth on one codebase shows something a scatter of small samples cannot: the ability to carry one system from front end to database at a professional standard. Enhancement One, in software design and engineering, replaced the Angular administrative application with a React 18 front end in strict TypeScript, consolidated duplicated forms into one shared, metadata-driven component, repaired the JWT middleware, and closed a stored cross-site scripting vector with a regression test that proves it stays closed. Enhancement Two, in algorithms and data structures, moved searching, sorting, and pagination to purpose-built server-side implementations: a stable merge sort, a bounded min-heap that selects the top results in O(n log k) time rather than sorting everything in O(n log n), field-weighted relevance scoring, and validated cursor pagination. Enhancement Three, in databases, pushed the work into the data layer itself: Mongoose schema validation, a weighted text index, an aggregation pipeline that executes search and statistics inside MongoDB (MongoDB, Inc., n.d.), a parity test proving the database engine and the application engine return identical orderings, role-based access control, and sanitization middleware that strips NoSQL injection operators.</p>
+<p>I chose to enhance a single artifact — Travlr Getaways, the full-stack travel application from CS-465 — in all three categories, because depth on one codebase shows something a scatter of small samples cannot: the ability to carry one system from front end to database at a professional standard. Enhancement One, in software design and engineering, replaced the Angular administrative application with a React 18 front end in strict TypeScript, consolidated duplicated forms into one shared, metadata-driven component, repaired the JWT middleware, and closed a stored cross-site scripting vector with a regression test that proves it stays closed. Enhancement Two, in algorithms and data structures, moved searching, sorting, and pagination to purpose-built server-side implementations: a stable merge sort, a bounded min-heap that selects the top results in O(n log k) time rather than sorting everything in O(n log n), field-weighted relevance scoring, and validated cursor pagination. Enhancement Three, in databases, pushed the work into the data layer itself: Mongoose schema validation, a weighted text index, an aggregation pipeline that executes search and statistics inside MongoDB (MongoDB, Inc., n.d.), a parity test proving the database engine and the application engine return identical orderings, role-based access control, and sanitization middleware that strips NoSQL injection operators. After all three enhancements were graded, I kept improving for the final portfolio: a setup script that brings the whole application up with two commands, a completed customer site with a working, database-stored contact form, and trie-backed search suggestions with a documented O(prefix) lookup. I also added price and rating filters executed inside the aggregation pipeline, with the parity test extended to prove both engines still agree, and a community trip-rating feature whose averages are computed inside the database, with one enforced rating per account per trip.</p>
 <p>Together the three enhancements trace one path — an authenticated query traveling from the React front end, through sanitization middleware and the algorithm layer, down to the database indexes — and the portfolio presents that path directly: an architecture diagram, a narrative for each enhancement, the code review video where the plan began, and the original and enhanced code side by side. Collectively, this work demonstrates the five outcomes of the Computer Science program: collaborating around a shared codebase, communicating to distinct audiences, solving problems with justified algorithmic trade-offs, applying professional tools and techniques, and designing with a security mindset. The sections that follow show the work itself.</p>
 <h2>References</h2>
 <div class="references">
@@ -64,7 +65,7 @@
 
 <section id="enhancement-one">
 <h2>Enhancement One: Software Design and Engineering</h2>
-<p>Migrated the administrative single-page application from Angular to React 18 with strict TypeScript; refactored the Express backend around centralized error-handling middleware; eliminated approximately 240 lines of duplicated form code with a shared metadata-driven component; moved the edit workflow from hidden localStorage state to URL route parameters; closed a stored XSS vector and an unauthenticated DELETE route; verified by a Jest and React Testing Library suite.</p>
+<p>Migrated the administrative single-page application from Angular to React 18 with strict TypeScript; refactored the Express backend around centralized error-handling middleware; eliminated approximately 240 lines of duplicated form code with a shared metadata-driven component; moved the edit workflow from hidden localStorage state to URL route parameters; closed a stored XSS vector and an unauthenticated DELETE route; verified by a Jest and React Testing Library suite. A later polish pass added a one-command developer setup and run experience, implemented in <code>scripts/setup.js</code>: <code>npm run setup</code> checks for a running MongoDB instance, installs dependencies on both the API and the frontend, generates the environment file with a freshly generated secret, and seeds the 27-trip catalog, while <code>npm run dev</code> starts the backend and frontend together with labeled console output. The server-rendered customer site was also finished: seven leftover static template files with placeholder content and dead links were removed from <code>public/</code>, leaving four coherent pages &mdash; Home (with three featured trips pulled live from the database), Travel (all 27 trips), About, and Contact, whose form validates input, passes the global NoSQL-injection sanitization, and stores messages in MongoDB through a new model and a <code>POST /api/contact</code> endpoint.</p>
 
 <div class="figure-pair">
   <figure>
@@ -77,6 +78,11 @@
   </figure>
 </div>
 
+<figure class="single">
+  <img src="assets/img/screenshots/after/customer-home.png" alt="The finished server-rendered customer home page, showing real Home, Travel, About, and Contact navigation and three featured trips pulled live from the database.">
+  <figcaption>The finished customer home page, with live navigation and featured trips pulled from the database.</figcaption>
+</figure>
+
 <ul class="enhancement-links">
   <li><a href="narratives/enhancement-one.html">Read the full narrative</a></li>
   <li><a href="CS499_Milestone_Two_Enhancement_One.zip">Download the code (original + enhanced)</a></li>
@@ -86,7 +92,7 @@
 
 <section id="enhancement-two">
 <h2>Enhancement Two: Algorithms and Data Structures</h2>
-<p>Added an algorithmic search and recommendation layer: stable merge sort implemented from scratch with a tested stability guarantee; field-weighted relevance search over tokenized queries with no user-derived regular expressions; cursor-based pagination that resumes deterministically as data changes; top-k recommendations pairing a hash-map index with a bounded min-heap for O(n log k) selection with IDF-weighted similarity; catalog expanded to 27 trips across four destination categories; verified by 36 backend Jest tests including integration tests against an in-memory MongoDB.</p>
+<p>Added an algorithmic search and recommendation layer: stable merge sort implemented from scratch with a tested stability guarantee; field-weighted relevance search over tokenized queries with no user-derived regular expressions; cursor-based pagination that resumes deterministically as data changes; top-k recommendations pairing a hash-map index with a bounded min-heap for O(n log k) selection with IDF-weighted similarity; catalog expanded to 27 trips across four destination categories; verified by 36 backend Jest tests including integration tests against an in-memory MongoDB. A later polish pass added search suggestions backed by a documented trie (prefix tree) module (<code>app_api/algorithms/trie.js</code>) with O(prefix-length) lookup, ranking completions by the same field weights as relevance search (name 3, resort 2, description 1); the new public <code>GET /api/trips/suggest</code> endpoint feeds an autocomplete list under the search box, built on a native HTML datalist with a 250ms debounce.</p>
 
 <div class="figure-pair">
   <figure>
@@ -113,11 +119,21 @@
 
 <section id="enhancement-three">
 <h2>Enhancement Three: Databases</h2>
-<p>Moved the data layer onto database-side foundations: MongoDB aggregation pipeline behind an engine switch (?engine=db|app) with an automated parity test proving identical orderings; Mongoose schema validation (numeric prices with range checks, unique uppercase trip codes, image fields restricted to bare filenames); weighted full-text index (name &times;3, resort &times;2, description &times;1) mirroring the application engine's weights; catalog statistics endpoint (GET /trips/stats); role-based access control restricting mutating routes to an admin JWT claim; NoSQL-injection sanitization middleware; CORS tightened to a single origin.</p>
+<p>Moved the data layer onto database-side foundations: MongoDB aggregation pipeline behind an engine switch (?engine=db|app) with an automated parity test proving identical orderings; Mongoose schema validation (numeric prices with range checks, unique uppercase trip codes, image fields restricted to bare filenames); weighted full-text index (name &times;3, resort &times;2, description &times;1) mirroring the application engine's weights; catalog statistics endpoint (GET /trips/stats); role-based access control restricting mutating routes to an admin JWT claim; NoSQL-injection sanitization middleware; CORS tightened to a single origin. A later polish pass moved price and star-rating filtering into the database itself: the aggregation pipeline now applies a $match on <code>perPerson</code> for the max-price filter and derives a star rating from the resort string with $addFields before matching it against the rating floor, with the identical logic mirrored in the application engine so the automated parity test now also proves the two engines identical under active filters; a new index on <code>perPerson</code> supports the price filter, and the interface gained Max price and Rating dropdown controls in the toolbar. Signed-in users can also rate any trip 1 to 5 stars from the trip cards; a unique compound database index enforces one rating per account per trip while still allowing a re-rating, and MongoDB aggregation computes the average and count shown as a "Community rating" line on the catalog cards and, read-only, on the customer Travel page.</p>
 
 <figure class="single">
   <img src="assets/img/screenshots/after/after-validation.png" alt="Schema-mirrored form validation rejecting a negative per-person price before the request reaches the API.">
   <figcaption>Mongoose schema validation rejecting a negative per-person price.</figcaption>
+</figure>
+
+<figure class="single">
+  <img src="assets/img/screenshots/after/after-filters.png" alt="The trip listing with the Max price filter set to $1,500 and the Rating filter set to 3-plus stars, narrowing the catalog to 6 of 13 matching trips.">
+  <figcaption>Database-side filtering: Max price $1,500 combined with a 3-plus star rating floor narrows the catalog to 13 trips.</figcaption>
+</figure>
+
+<figure class="single">
+  <img src="assets/img/screenshots/after/after-ratings.png" alt="The trip catalog for a logged-in user, showing Community rating lines with an average and count on each trip card alongside the search and filter toolbar.">
+  <figcaption>Community ratings: aggregation-computed average and count shown on each card, one rating per account per trip.</figcaption>
 </figure>
 
 <div class="figure-pair">
@@ -138,11 +154,27 @@
 </ul>
 </section>
 
+<section id="final-polish">
+<h2>Final Polish Beyond the Graded Milestones</h2>
+<p>Each of the three graded milestones above was scored full marks; the final portfolio week added a further round of improvements in every area covered by the capstone.</p>
+<ul>
+  <li><strong>Software design and engineering:</strong> a two-command setup and run experience &mdash; <code>npm run setup</code> and <code>npm run dev</code> &mdash; that gets a fresh clone of the full stack installed, configured, seeded, and running with a single pair of commands.</li>
+  <li><strong>Algorithms and data structures:</strong> trie-backed autocomplete suggestions with documented O(prefix-length) lookup, ranked by the same field weights as the relevance search.</li>
+  <li><strong>Databases:</strong> price and star-rating filters executed inside the MongoDB aggregation pipeline, mirrored exactly in the application engine, with the parity proof extended to cover both engines under active filters.</li>
+  <li><strong>Code review:</strong> closed captions added to the code review video for accessibility.</li>
+  <li><strong>Security and hygiene:</strong> secrets removed from all public code zips and the signing key rotated.</li>
+  <li><strong>Customer site:</strong> the server-rendered customer site was finished, with seven leftover placeholder template pages removed and a working, sanitized, database-backed Contact form added.</li>
+  <li><strong>Community trip ratings:</strong> signed-in users rate any trip 1 to 5 stars, one rating per account per trip, with averages and counts computed by MongoDB aggregation and shown on the catalog cards and the customer Travel page.</li>
+</ul>
+<p>Together these changes grew test coverage from 74 to 121 automated tests across the backend and frontend.</p>
+<p>💻 <a href="CS499_Final_Travlr_Original_and_Enhanced.zip">Download the final application (original and enhanced code)</a> &mdash; the complete polished version including every improvement above. The three milestone zips in the sections above remain the versions submitted for grading.</p>
+</section>
+
 <section id="architecture">
 <h2>Architecture</h2>
 <p>The diagram below was recommended by the course instructor and traces one authenticated query end to end.</p>
 <a class="diagram-link" href="assets/img/CS499_Data_Flow_Diagram.svg">
-  <img src="assets/img/CS499_Data_Flow_Diagram.png" alt="Architecture diagram tracing an authenticated query from the React frontend, through CORS and NoSQL-injection sanitization middleware, into either the MongoDB aggregation-pipeline engine or the application algorithm engine, through Mongoose schema validation, down to the MongoDB indexes, and back to the browser as JSON.">
+  <img src="assets/img/CS499_Data_Flow_Diagram.png" alt="Architecture diagram tracing an authenticated query from the React frontend, through CORS and NoSQL-injection sanitization middleware, into either the MongoDB aggregation-pipeline engine (including its price and rating filter stage) or the application algorithm engine, through Mongoose schema validation, down to the MongoDB indexes including the perPerson price index, with the trie-backed /api/trips/suggest endpoint shown alongside search, and back to the browser as JSON.">
 </a>
 
 <details class="alignment">

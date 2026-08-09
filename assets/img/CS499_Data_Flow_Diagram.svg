@@ -57,19 +57,19 @@
 
   <!-- Left branch: read path -->
   <rect x="60" y="652" width="560" height="290" rx="10" fill="#f0fdfa" stroke="#0d9488" stroke-width="2"/>
-  <text x="340" y="678" text-anchor="middle" font-size="15" font-weight="700" fill="#115e59">Read path (public) — GET /trips/search · /stats · /recommendations</text>
+  <text x="340" y="678" text-anchor="middle" font-size="15" font-weight="700" fill="#115e59">Read path (public) — GET /trips/search · /stats · /recommendations · /suggest</text>
   <text x="340" y="700" text-anchor="middle" font-size="13" fill="#334155">tripsQuery.js controller — engine switch  ?engine=db | app  (db is the default)</text>
 
   <rect x="84" y="716" width="512" height="104" rx="8" fill="#ffffff" stroke="#0d9488" stroke-width="1.5"/>
   <text x="340" y="738" text-anchor="middle" font-size="13.5" font-weight="700" fill="#115e59">Database engine — tripsDb.js (Enhancement Three)</text>
   <text x="340" y="760" text-anchor="middle" font-size="12.5" fill="#334155">MongoDB aggregation pipeline, executed inside the database:</text>
-  <text x="340" y="780" text-anchor="middle" font-size="12.5" fill="#334155">$match { $text } → $addFields textScore ($meta) → $facet {</text>
+  <text x="340" y="780" text-anchor="middle" font-size="12.5" fill="#334155">$match { $text } → price/rating filter $match → $addFields textScore → $facet {</text>
   <text x="340" y="798" text-anchor="middle" font-size="12.5" fill="#334155">total count  ·  page: cursor $match → $sort (collation) → $limit }</text>
 
   <rect x="84" y="832" width="512" height="94" rx="8" fill="#ffffff" stroke="#0d9488" stroke-width="1.5"/>
   <text x="340" y="854" text-anchor="middle" font-size="13.5" font-weight="700" fill="#115e59">Application engine — algorithms/ (Enhancement Two)</text>
-  <text x="340" y="876" text-anchor="middle" font-size="12.5" fill="#334155">Field-weighted relevance scoring → stable merge sort O(n log n)</text>
-  <text x="340" y="894" text-anchor="middle" font-size="12.5" fill="#334155">or bounded min-heap top-k O(n log k) → validated cursor pagination</text>
+  <text x="340" y="876" text-anchor="middle" font-size="12.5" fill="#334155">Field-weighted relevance scoring → stable merge sort O(n log n) or bounded</text>
+  <text x="340" y="894" text-anchor="middle" font-size="12.5" fill="#334155">min-heap top-k O(n log k) → cursor pagination · trie autocomplete O(prefix)</text>
   <text x="340" y="912" text-anchor="middle" font-size="12.5" fill="#334155">Kept selectable for the documented engine-parity comparison</text>
 
   <!-- Right branch: write path -->
@@ -106,11 +106,12 @@
   <line x1="620" y1="1088" x2="620" y2="1128" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- F: MongoDB -->
-  <rect x="290" y="1132" width="660" height="110" rx="10" fill="#ecfdf5" stroke="#059669" stroke-width="2"/>
+  <rect x="290" y="1132" width="660" height="130" rx="10" fill="#ecfdf5" stroke="#059669" stroke-width="2"/>
   <text x="620" y="1158" text-anchor="middle" font-size="16" font-weight="700" fill="#065f46">MongoDB — trips collection</text>
   <text x="620" y="1182" text-anchor="middle" font-size="13" fill="#334155">trip_text_weighted text index: name ×3 · resort ×2 · description ×1</text>
   <text x="620" y="1202" text-anchor="middle" font-size="13" fill="#334155">(weights deliberately mirror the application engine’s field weights)</text>
   <text x="620" y="1222" text-anchor="middle" font-size="13" fill="#334155">unique index on code — duplicate trip codes are impossible</text>
+  <text x="620" y="1242" text-anchor="middle" font-size="13" fill="#334155">perPerson index — serves the price-range filters and price sorts</text>
 
   <!-- Return path -->
   <path d="M 950 1187 L 1215 1187 L 1215 144 L 924 144" fill="none" stroke="#059669" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrowGreen)"/>
