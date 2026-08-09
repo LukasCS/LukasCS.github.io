@@ -394,3 +394,49 @@ table.alignment-table td:first-child {
     padding: 2rem 1rem 2.5rem;
   }
 }
+
+/* Live test section — the first thing on the page, holding the two
+   links to the running application on its public server. */
+.live-demo {
+  background: var(--color-accent);
+  color: #ffffff;
+  border-radius: var(--radius);
+  padding: 1.5rem 1.5rem 1.75rem;
+  margin-bottom: 2.5rem;
+}
+
+.live-demo h2 {
+  color: #ffffff;
+  margin-top: 0;
+  border: 0;
+}
+
+.live-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1.1rem 0 0.9rem;
+}
+
+.live-button {
+  display: inline-block;
+  background: #ffffff;
+  color: var(--color-accent-dark);
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.live-button:hover,
+.live-button:focus {
+  background: #eef7f7;
+  text-decoration: underline;
+}
+
+.live-note {
+  font-size: 0.92rem;
+  margin-bottom: 0;
+  color: #e4f2f2;
+}
